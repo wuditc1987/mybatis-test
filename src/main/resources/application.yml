@@ -1,0 +1,106 @@
+server:
+  port: 80
+  servlet:
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    max-threads: 300
+    # tomcat最大线程数，默认为200
+    uri-encoding: UTF-8
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+elearning:
+  version: 1.0.0
+  description: spring-boot-mybatis-demo
+  #最大密码重试次数
+  maxPassRetry: 3
+
+# 日志配置
+logging:
+  level:
+    com.mybatis: debug
+    org.springframework: info
+
+jasypt:
+  encryptor:
+    password: b607148f7a90a019f177aed30507f624
+
+
+spring:
+  datasource:
+      url: jdbc:mysql://localhost:3306/spring?useUnicode=true&characterEncoding=utf8&useTimezone=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=true
+      username: root
+      password: wudi@1987
+  redis:
+    host: ENC(9OqenfdN55GP4Ek0sSWbUZslT1YyiPYa)
+    port: 6379
+    password: ENC(zOetPnzAkdl+QbJIWH5yP2WKaWCAYxqo)
+#    password: kUOOx0wjWnUVKTx+sVKNJjasSTClHF41mjJOYzo+P788TejU+JxVR2uzfyodYmhVok6EAlV/LtRfJ0Ys9dwCaiicb5z5rcCgP35Wwg/9MH1G5tqtI6Hithe0biKUDy9oFJa+3AAGTOdMdeaCK3ikfQZ0PNwqkgnMoB2dCHm3NTGJBNhPTkt/FcJIVj62NaORYApAqfuhUSzryGYsArHuygeGIsDrx9WW944YSR64aVQLcpADTUiJe1rztd65YQlCMcFcl8qAvblLApY4BjxVCdrTJ8Qf+X5yhpp67wLitmQiX2xgq3oyeNMmI9t6q1K0ZJ/31PtGiDaOqlxPfQYcgQ==
+    timeout: 10000ms #连接超时时间（毫秒）
+    expiry: 60   #访问超时时间
+    ttl: 0s #全局缓存过期时间，为0则不过期
+    keyPrefix : _
+    # spring redis boot starter在2.0时连接的客户端由jedis变为了lettuce，但是依然支持jedis的相关配置
+    lettuce:
+      pool:
+        max-active: 10   #连接池最大连接数（使用负值表示没有限制）
+        max-wait: 10000ms  #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 8
+
+#   哨兵模式配置
+#    sentinel:
+#      master: 39.105.7.35:6379
+#      nodes: 39.105.7.35:6380,39.105.7.35:6381
+#   集群模式配置
+#    cluster:
+#      nodes: 39.105.7.35:6379,39.105.7.35:6380,39.105.7.35:6381
+#      max-redirects: 10
+  main:
+    #使用OFF时会报错，是由于yaml解析时，会把OFF解析成Boolean类型，然后报出类型匹配异常
+    banner-mode: log
+    web-application-type: servlet
+
+
+
+# MyBatis
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.mybatis
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/*Mapper.xml
+  # 加载全局的配置文件
+  configLocation: classpath:config/mybatis-config.xml
+
+
+
+#线程池
+thread:
+  pool:
+    keepAliveSeconds: 2000
+    maxPoolSize: 100
+    corePoolSize: 10
+
+shiro:
+  main:
+    loginUrl: /login
+    unauthUrl: /unauth
+    indexUrl: /index
+  session:
+    #session 过期时间 30分钟
+    timeout: 1800
+    #app session过期时间 7天
+    appSessionTimeout: 604800
+    # 相隔多久检查一次session的有效性，默认10分钟
+    validationInterval: 10
+    # 同一个用户最大会话数，比如2的意思是同一个账号允许最多同时两个人登录（默认-1不限制）
+    maxSession: -1
+  cookie:
+    # 设置Cookie的域名 默认空，即当前访问的域名
+    domain:
+    # 设置cookie的有效访问路径
+    path: /
+    # 设置HttpOnly属性
+    httpOnly: true
+    # 设置Cookie的过期时间，天为单位
+    maxAge: 30
