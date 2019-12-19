@@ -40,7 +40,7 @@ public class ReflectUtils {
      *
      * 如向上转型到Object仍无法找到, 返回null.
      */
-    public static Field getAccessibleField(final Object obj, final String fieldName) {
+    private static Field getAccessibleField(final Object obj, final String fieldName) {
 //        Validate.notNull(obj, "object can't be null");
 //        Validate.notBlank(fieldName, "fieldName can't be blank");
         for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -69,7 +69,7 @@ public class ReflectUtils {
     /**
      * 改变private/protected的成员变量为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
      */
-    public static void makeAccessible(Field field) {
+    private static void makeAccessible(Field field) {
         boolean bool = (!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers()) || Modifier
                 .isFinal(field.getModifiers())) && !field.isAccessible();
         if (bool) {

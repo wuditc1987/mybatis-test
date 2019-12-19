@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class MybatisTest {
 
     @BeforeClass
     public static void beforeClass() throws IOException {
-        String resource = "mybatis-config.xml";
+        String resource = "mybatis.xml";
         factory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader(resource));
     }
 
@@ -42,14 +41,14 @@ public class MybatisTest {
      */
     @Test
     public void testLevel1Cache(){
-        try (SqlSession sqlSession = factory.openSession()){
+        try (SqlSession sqlSession = factory.openSession();SqlSession sqlSession1 = factory.openSession()){
             SysUserMapper mapper = sqlSession.getMapper(SysUserMapper.class);
             SysUser user = mapper.selectByPrimaryKey(17);
             LOGGER.info("user = [{}]",user);
-            user = factory.openSession().getMapper(SysUserMapper.class).selectByPrimaryKey(17);
+            user = sqlSession1.getMapper(SysUserMapper.class).selectByPrimaryKey(17);
             LOGGER.info("user = [{}]",user);
         }catch (Exception e){
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
     }
 
@@ -59,7 +58,11 @@ public class MybatisTest {
      */
     @Test
     public void testLevel2Cache(){
+        try {
 
+        }catch (Exception e){
+
+        }
     }
 
 

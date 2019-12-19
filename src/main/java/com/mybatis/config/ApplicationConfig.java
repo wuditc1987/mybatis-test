@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * @author wudi
  * @date
  */
-@Configuration
+//@Configuration
 //@EnableAspectJAutoProxy(exposeProxy = true)
 //@MapperScan(basePackages = "com.shiro.*.mapper")
 public class ApplicationConfig {
