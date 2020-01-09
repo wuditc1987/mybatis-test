@@ -37,6 +37,15 @@ public class SysUser extends BaseEntity{
 
     private String description;
 
+    public SysUser(){
+
+    }
+
+    public SysUser(Integer id,String name){
+        super.setId(id);
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -149,4 +158,12 @@ public class SysUser extends BaseEntity{
         this.description = description == null ? null : description.trim();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("");
+        sb.append(" id = ").append(super.getId())
+                .append(", name = ").append(this.getName())
+                .append(", password = ").append(this.getPassword());
+        return sb.toString();
+    }
 }

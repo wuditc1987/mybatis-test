@@ -3,7 +3,6 @@ package com.mybatis.config;
 import com.mybatis.util.ReflectUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.statement.StatementHandler;
-import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
@@ -17,7 +16,7 @@ import java.sql.Connection;
 /**
  * @author wudi
  * @version 1.0
- * @Description 拦截器
+ * @description 拦截器
  * @date 2019/11/24 6:14 PM
  */
 @Intercepts(
@@ -47,7 +46,8 @@ public class PrepareInterceptor implements Interceptor {
     }
 
     private Object prepareStatement(Invocation invocation, StatementHandler handler) throws Throwable {
-        Object prepStatHandler = ReflectUtils.getFieldValue(handler, FIELDNAME_DELEGATE);
+        LOGGER.info("prepareStatement");
+        /*Object prepStatHandler = ReflectUtils.getFieldValue(handler, FIELDNAME_DELEGATE);
         if (prepStatHandler == null) {
             return invocation.proceed();
         }
@@ -63,20 +63,20 @@ public class PrepareInterceptor implements Interceptor {
             newSql = "";
         }catch (Exception e){
 
-        }
+        }*/
 
         return invocation.proceed();
     }
 
     private Object checkExecuteResult(Invocation invocation) throws Throwable {
-
+        LOGGER.info("checkExecuteResult");
         return invocation.proceed();
     }
 
-    @Override
+    /*@Override
     public Object plugin(Object target) {
         return Plugin.wrap(target,this);
-    }
+    }*/
 
 
     private Object getRealTargetFromProxy(Object target) throws Throwable {

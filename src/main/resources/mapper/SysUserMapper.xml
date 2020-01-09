@@ -241,6 +241,7 @@
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
+    <cache />
     <update id="updateByPrimaryKeySelective" parameterType="com.mybatis.demo.entity.SysUser">
         update sys_user
         <set>
@@ -327,14 +328,14 @@
             version_no     = #{versionNo,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="findAll" resultMap="BaseResultMap">
+    <select id="findAll" resultMap="BaseResultMap" >
         select
         <include refid="Base_Column_List"/>
         from
         sys_user
     </select>
 
-    <select id="findByLoginname" resultMap="BaseResultMap">
+    <select id="findByLoginname" resultMap="BaseResultMap" useCache="true">
         select
         <include refid="Base_Column_List"/>
         from

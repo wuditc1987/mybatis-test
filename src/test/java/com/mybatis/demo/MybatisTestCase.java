@@ -23,10 +23,9 @@ import java.io.IOException;
  */
 //@SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
-public class MybatisTest {
+public class MybatisTestCase {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MybatisTest.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(MybatisTestCase.class);
 
     private static SqlSessionFactory factory;
 
@@ -41,6 +40,10 @@ public class MybatisTest {
      */
     @Test
     public void testLevel1Cache(){
+
+        /**
+         * 一级缓存默认开启，默认范围 scope = LocalCacheScope.SESSION
+         */
         try (SqlSession sqlSession = factory.openSession();SqlSession sqlSession1 = factory.openSession()){
             SysUserMapper mapper = sqlSession.getMapper(SysUserMapper.class);
             SysUser user = mapper.selectByPrimaryKey(17);
@@ -71,7 +74,39 @@ public class MybatisTest {
      */
     @Test
     public void testTransactional(){
+        try (SqlSession sqlSession = factory.openSession()){
+            SysUserMapper mapper = sqlSession.getMapper(SysUserMapper.class);
+            SysUser user = mapper.selectByPrimaryKey(17);
+            LOGGER.info("user = [{}]",user);
+            user.setPhone("13146057077");
+            mapper.updateByPrimaryKeySelective(user);
+            sqlSession.commit();
+        }catch (Exception e){
+            LOGGER.error(e.getMessage(),e);
+        }
+    }
 
+    /**
+     * 测试sql预编译
+     */
+    @Test
+    public void testSqlPrecompile(){
+        try (SqlSession sqlSession = factory.openSession()){
+            SysUserMapper mapper = sqlSession.getMapper(SysUserMapper.class);
+            SysUser user = mapper.findByLoginname("zero");
+            sqlSession.commit();
+            LOGGER.info("user = [{}]",user);
+            LOGGER.info("user = [{}]",mapper.findByLoginname("zero"));
+            LOGGER.info("user = [{}]",mapper.findByLoginname("zero"));
+        }
+    }
+
+    @Test
+    public void testMapperProxy(){
+        MybatisMapperProxy proxy = new MybatisMapperProxy();
+        SysUserMapper mapper = proxy.newInstance(SysUserMapper.class);
+        SysUser user = mapper.selectByPrimaryKey(17);
+        System.out.println(user);
     }
 
 }

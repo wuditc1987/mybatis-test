@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+
+	<!-- 根据环境配置日志级别 java -jar xxx.jar –spring.profiles.active=prod -->
+	<!--<springProfile name="dev">
+		<logger name="org.springboot.sample" level="DEBUG" />
+	</springProfile>
+	<springProfile name="prod">
+		<logger name="org.springboot.sample" level="INFO" />
+	</springProfile>-->
+	<conversionRule conversionWord="msg" converterClass="com.mybatis.config.log.MybatisObjectMessageConverter"/>
+
+	<contextName>${elearning.description}</contextName>
+	<property name="log.path" value="/Users/wudi/Documents/log/boot/mybatis-demo"/>
+
+	<property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [%method,%line] - %msg%n" />
+
+	<!-- 控制台输出日志 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<!--文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份)-->
+	<appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 统一文件 -->
+		<file>${log.path}/demo/mybatis-demo.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 归档的日志文件的路径，例如今天是2013-12-21日志，当前写的日志文件路径为file节点指定，可以将此文件与file指定文件路径设置为不同路径，从而将当前日志文件或归档日志文件置不同的目录。
+            而2013-12-21的日志文件在由fileNamePattern指定。%d{yyyy-MM-dd}指定日期格式，%i指定索引 -->
+			<FileNamePattern>${log.path}/elearning/elearning.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 过滤的级别 -->
+			<level>INFO</level>
+			<!-- 匹配时的操作：接收（记录） -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.path}/error/error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 归档的日志文件的路径，例如今天是2013-12-21日志，当前写的日志文件路径为file节点指定，可以将此文件与file指定文件路径设置为不同路径，从而将当前日志文件或归档日志文件置不同的目录。
+            而2013-12-21的日志文件在由fileNamePattern指定。%d{yyyy-MM-dd}指定日期格式，%i指定索引 -->
+			<FileNamePattern>${log.path}/error/error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 过滤的级别 -->
+			<level>ERROR</level>
+			<!-- 匹配时的操作：接收（记录） -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+
+	<root level="info">
+		<appender-ref ref="console"/>
+		<appender-ref ref="file_info"/>
+		<appender-ref ref="file_error"/>
+	</root>
+
+
+</configuration>

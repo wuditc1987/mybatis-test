@@ -4,39 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-    <!-- configuration 中的属性设置顺序需要与 mybatis-3-config.dtd中定义的顺序一致-->
-
-    <settings>
-        <setting name="cacheEnabled" value="true"/>  <!-- 全局映射器启用缓存 -->
-        <setting name="useGeneratedKeys" value="true"/>  <!-- 允许 JDBC 支持自动生成主键 -->
-        <setting name="defaultExecutorType" value="REUSE"/> <!-- 配置默认的执行器 -->
-        <setting name="logImpl" value="SLF4J"/> <!-- 指定 MyBatis 所用日志的具体实现 -->
-    </settings>
-    
-    <environments default="development">
-        <environment id="development">
-            <transactionManager type="JDBC" />
-            <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/spring"/>
-                <property name="username" value="root"/>
-                <property name="password" value="wudi@1987"/>
-            </dataSource>
-        </environment>
-    </environments>
-
-    <mappers>
-        <!--
-            此处如果使用package标签 或者 mapper中使用class属性，那么需要将mapper接口类名和mapper.xml映射文件名称保持一致，且在一个目录
-            否则在XMLConfigBuilder的mapperElement方法调用的configuration.addMappers(mapperPackage);
-            会抛异常。
-        -->
-        <!--<package name="com.mybatis.demo.mapper"/>-->
-        <mapper resource="mapper/SysUserMapper.xml"/>
-    </mappers>
-    
-
-
     <!--<settings>
         &lt;!&ndash; 该配置影响的所有映射器中配置的缓存的全局开关。默认值true &ndash;&gt;
         <setting name="cacheEnabled" value="true"/>
@@ -72,5 +39,68 @@
         &lt;!&ndash;   指定哪个对象的方法触发一次延迟加载。  &ndash;&gt;
         <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
     </settings>-->
+    <!-- configuration 中的属性设置顺序需要与 mybatis-3-config.dtd中定义的顺序一致-->
 
+    <settings>
+        <setting name="cacheEnabled" value="true"/>  <!-- 全局映射器启用缓存 -->
+        <setting name="useGeneratedKeys" value="true"/>  <!-- 允许 JDBC 支持自动生成主键 -->
+        <setting name="defaultExecutorType" value="REUSE"/> <!-- 配置默认的执行器 -->
+        <setting name="logImpl" value="SLF4J"/> <!-- 指定 MyBatis 所用日志的具体实现 -->
+    </settings>
+    
+    <plugins>
+        <plugin interceptor="com.mybatis.config.PrepareInterceptor" />
+    </plugins>
+    
+    <environments default="development">
+        <environment id="development">
+            <!--
+                type = "JDBC" 使用JDBC管理事务机制
+                type = "MANAGED" 使用WEB容器管理事务
+                注意：如果我们使用MyBatis构建本地程序，即不是WEB程序，若将type设置成"MANAGED"，
+                那么，我们执行的任何update操作，即使我们最后执行了commit操作，数据也不会保留，不会对数据库造成任何影响。
+                因为我们将MyBatis配置成了“MANAGED”，即MyBatis自己不管理事务，而我们又是运行的本地程序，
+                没有事务管理功能，所以对数据库的update操作都是无效的。
+            -->
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <!--
+                    其中driver，url，username，password等属性为UnpooledDataSource类中的属性
+                    poolMaximumActiveConnections为PooledDataSource中的属性，也可以修改其他不为private的属性
+                 -->
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/spring"/>
+                <property name="username" value="root"/>
+                <property name="password" value="wudi@1987"/>
+                <!--最大空闲连接数-->
+                <!--<property name="poolMaximumIdleConnections" value="10"/>-->
+                <!--最大活动连接数-->
+                <!--<property name="poolMaximumActiveConnections" value="20"/>-->
+            </dataSource>
+        </environment>
+        <environment id="work">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/env_dev"/>
+                <property name="username" value="root"/>
+                <property name="password" value="wudi@1987"/>
+            </dataSource>
+        </environment>
+    </environments>
+    
+
+<!--    <databaseIdProvider type="">-->
+<!--        <property name="" value=""/>-->
+<!--    </databaseIdProvider>-->
+
+    <mappers>
+        <!--
+            此处如果使用package标签 或者 mapper中使用class属性，那么需要将mapper接口类名和mapper.xml映射文件名称保持一致，且在一个目录
+            否则在XMLConfigBuilder的mapperElement方法调用的configuration.addMappers(mapperPackage);
+            会抛bindException异常。
+        -->
+        <!--<package name="com.mybatis.demo.mapper"/>-->
+        <mapper resource="mapper/SysUserMapper.xml"/>
+    </mappers>
 </configuration>
