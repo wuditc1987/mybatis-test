@@ -164,6 +164,8 @@ public class SysUser extends BaseEntity{
         sb.append(" id = ").append(super.getId())
                 .append(", name = ").append(this.getName())
                 .append(", password = ").append(this.getPassword());
+        sb.append(" values from super class = [ ")
+                .append(super.toString()).append(" ]");
         return sb.toString();
     }
 }
